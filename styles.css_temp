@@ -1,0 +1,21 @@
+/* root and core styles... */
+:root {
+  --color-bg: #F7F6F3;
+  --color-text-primary: #111111;
+  --color-accent: #8B0000;
+  --color-success: #2D5A27;
+  --color-warning: #B47D1D;
+  --color-border: #D1D1D1;
+  --space-8: 8px;
+  --space-16: 16px;
+  --space-24: 24px;
+  --space-40: 40px;
+  --space-64: 64px;
+  --font-serif: "Source Serif 4", serif;
+  --font-sans: "Inter", sans-serif;
+  --transition: 200ms ease-in-out;
+  --radius: 2px;
+}
+
+/* ... skipping most of the file for brevity in logic but I must overwrite the whole thing to be safe ... */
+/* Wait, I should not overwrite the WHOLE thing if I don't have it all. I have lines 1-840. */

@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KodNest Premium Build System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:wght@500;600&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+  <div class="app-root">
+    <!-- Top Bar -->
+    <header class="top-bar">
+      <div class="top-bar__left">
+        KODNEST PREMIUM
+      </div>
+
+      <!-- Desktop Navigation -->
+      <nav class="top-bar__nav">
+        <a href="#dashboard" class="nav-link" data-route="dashboard">Dashboard</a>
+        <a href="#saved" class="nav-link" data-route="saved">Saved</a>
+        <a href="#digest" class="nav-link" data-route="digest">Digest</a>
+        <a href="#settings" class="nav-link" data-route="settings">Settings</a>
+        <a href="#proof" class="nav-link" data-route="proof">Proof</a>
+      </nav>
+
+      <div class="top-bar__right">
+        <span class="status-badge status-badge--in-progress">NOT STARTED</span>
+        <button class="mobile-menu-toggle" aria-label="Toggle Menu">
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Mobile Navigation Overlay -->
+    <div class="mobile-nav-overlay">
+      <nav class="mobile-nav">
+        <a href="#dashboard" class="mobile-nav-link" data-route="dashboard">Dashboard</a>
+        <a href="#saved" class="mobile-nav-link" data-route="saved">Saved</a>
+        <a href="#digest" class="mobile-nav-link" data-route="digest">Digest</a>
+        <a href="#settings" class="mobile-nav-link" data-route="settings">Settings</a>
+        <a href="#proof" class="mobile-nav-link" data-route="proof">Proof</a>
+      </nav>
+    </div>
+
+    <!-- Dynamic Content Area -->
+    <main class="page" id="app-view">
+      <!-- Route content will be injected here -->
+    </main>
+
+    <!-- Modal structure for job details -->
+    <div id="jobModal" class="modal-overlay">
+      <div class="modal">
+        <div class="modal__header">
+          <h2 id="modalTitle" class="modal__title">Job Title</h2>
+          <button id="closeModal" class="modal__close">&times;</button>
+        </div>
+        <div class="modal__body">
+          <div class="modal__meta">
+            <span id="modalCompany" class="modal__company">Company</span>
+            <span id="modalLocation" class="modal__location">Location</span>
+          </div>
+          <p id="modalDescription" class="modal__description">Description goes here.</p>
+          <div class="modal__skills">
+            <div id="modalSkillsList" class="skills-list"></div>
+          </div>
+        </div>
+        <div class="modal__footer">
+          <a id="modalApplyBtn" href="#" target="_blank" class="btn btn--primary">Apply Now</a>
+          <button id="modalSaveBtn" class="btn btn--secondary">Save Job</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Route Templates (Hidden) -->
+    <template id="template-home">
+      <div class="hero">
+        <h1 class="hero__title">Stop Missing The Right Jobs.</h1>
+        <p class="hero__subtitle text-block">Precision-matched job discovery delivered daily at 9AM.</p>
+        <div class="hero__cta">
+          <button class="btn btn--primary" id="startTrackingCTA">Start Tracking</button>
+        </div>
+      </div>
+    </template>
+
+    <template id="template-dashboard">
+      <section class="context-header">
+        <h1 class="context-header__title">Dashboard <span id="jobCount" class="badge">60</span></h1>
+
+        <div id="prefsBanner" class="banner banner--info hidden">
+          Set your preferences to activate intelligent matching.
+          <a href="#settings" class="banner__link">Go to Settings</a>
+        </div>
+
+        <div class="filter-bar">
+          <div class="filter-group">
+            <input type="text" id="keywordSearch" class="text-input" placeholder="Search title or company...">
+          </div>
+
+          <div class="filter-group">
+            <select id="locationFilter" class="select-input">
+              <option value="">All Locations</option>
+              <option value="Bangalore">Bangalore</option>
+              <option value="Gurgaon">Gurgaon</option>
+              <option value="Mumbai">Mumbai</option>
+              <option value="Pune">Pune</option>
+              <option value="Hyderabad">Hyderabad</option>
+              <option value="Chennai">Chennai</option>
+              <option value="Remote">Remote</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <select id="modeFilter" class="select-input">
+              <option value="">All Modes</option>
+              <option value="Remote">Remote</option>
+              <option value="Hybrid">Hybrid</option>
+              <option value="Onsite">Onsite</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <select id="experienceFilter" class="select-input">
+              <option value="">All Experience</option>
+              <option value="Fresher">Fresher</option>
+              <option value="0-1">0-1 Year</option>
+              <option value="1-3">1-3 Years</option>
+              <option value="3-5">3-5 Years</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <select id="sourceFilter" class="select-input">
+              <option value="">All Sources</option>
+              <option value="LinkedIn">LinkedIn</option>
+              <option value="Naukri">Naukri</option>
+              <option value="Indeed">Indeed</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <select id="statusFilter" class="select-input">
+              <option value="">All Statuses</option>
+              <option value="not_applied">Not Applied</option>
+              <option value="applied">Applied</option>
+              <option value="rejected">Rejected</option>
+              <option value="selected">Selected</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <select id="sortOrder" class="select-input">
+              <option value="latest">Latest First</option>
+              <option value="match">Match Score</option>
+              <option value="salary">Salary</option>
+              <option value="oldest">Oldest First</option>
+            </select>
+          </div>
+
+          <div class="filter-group filter-group--toggle">
+            <label class="toggle">
+              <input type="checkbox" id="thresholdToggle">
+              <span class="toggle__slider"></span>
+              <span class="toggle__label">Show only matches</span>
+            </label>
+          </div>
+        </div>
+      </section>
+      <div id="jobsList" class="jobs-grid">
+        <!-- Rendered job cards will appear here -->
+      </div>
+    </template>
+
+    <template id="template-saved">
+      <section class="context-header">
+        <h1 class="context-header__title">Saved Jobs</h1>
+      </section>
+      <div id="savedJobsList" class="jobs-grid">
+        <!-- Rendered saved job cards will appear here -->
+      </div>
+    </template>
+
+    <template id="template-digest">
+      <section class="context-header">
+        <h1 class="context-header__title">Daily Digest</h1>
+        <p class="context-header__subtitle">Your intelligent morning briefing on the best matching roles.</p>
+      </section>
+
+      <div id="digestView" class="digest-container">
+        <!-- Initial Generator State -->
+        <div id="digestGenerator" class="card card--generator">
+          <div class="empty-state">
+            <p class="empty-state__text">Generate your personalized daily briefing based on your preferences.</p>
+            <button class="btn btn--primary" id="generateDigestBtn">Generate Today's 9AM Digest (Simulated)</button>
+            <p class="demo-note">Demo Mode: Daily 9AM trigger simulated manually.</p>
+          </div>
+        </div>
+
+        <!-- Digest Content State (Hidden until generated) -->
+        <div id="digestContent" class="hidden">
+          <div class="digest-actions">
+            <button class="btn btn--secondary" id="copyDigestBtn">Copy Digest to Clipboard</button>
+            <button class="btn btn--secondary" id="emailDigestBtn">Create Email Draft</button>
+          </div>
+
+          <div class="digest-card" id="digestBody">
+            <!-- Email structure will be injected here -->
+          </div>
+        </div>
+
+        <!-- Recent Status Updates (Always visible if data exists) -->
+        <div id="recentUpdatesSection" class="hidden" style="margin-top: 32px;">
+          <h3 class="card__title" style="margin-bottom: 16px;">Recent Status Updates</h3>
+          <div id="recentUpdatesList" class="digest-list">
+            <!-- Status updates will be injected here -->
+          </div>
+        </div>
+
+        <!-- Preferences Missing State -->
+        <div id="digestNoPrefs" class="hidden">
+          <div class="empty-state">
+            <p class="empty-state__text">Set preferences to generate a personalized digest.</p>
+            <a href="#settings" class="btn btn--primary">Go to Settings</a>
+          </div>
+        </div>
+      </div>
+    </template>
+
+    <template id="template-settings">
+      <section class="context-header">
+        <h1 class="context-header__title">Settings</h1>
+        <p class="context-header__subtitle text-block">Configure your discovery parameters to ensure precision matching.
+        </p>
+      </section>
+
+      <div class="layout">
+        <div class="layout__primary">
+          <div class="card">
+            <h2 class="card__title">Search Preferences</h2>
+            <div class="form-grid">
+              <div class="form-field form-field--full">
+                <label for="roleKeywords" class="field-label">Role Keywords (comma separated)</label>
+                <input id="roleKeywords" type="text" class="text-input"
+                  placeholder="e.g. Frontend Engineer, Product Manager" />
+              </div>
+
+              <div class="form-field form-field--full">
+                <label class="field-label">Preferred Locations</label>
+                <div class="checkbox-group" id="prefLocations">
+                  <label class="checkbox-sm"><input type="checkbox" value="Bangalore"> Bangalore</label>
+                  <label class="checkbox-sm"><input type="checkbox" value="Gurgaon"> Gurgaon</label>
+                  <label class="checkbox-sm"><input type="checkbox" value="Mumbai"> Mumbai</label>
+                  <label class="checkbox-sm"><input type="checkbox" value="Pune"> Pune</label>
+                  <label class="checkbox-sm"><input type="checkbox" value="Hyderabad"> Hyderabad</label>
+                  <label class="checkbox-sm"><input type="checkbox" value="Chennai"> Chennai</label>
+                  <label class="checkbox-sm"><input type="checkbox" value="Remote"> Remote</label>
+                </div>
+              </div>
+
+              <div class="form-field">
+                <label class="field-label">Preferred Mode</label>
+                <div class="checkbox-group" id="prefModes">
+                  <label class="checkbox-sm"><input type="checkbox" value="Remote"> Remote</label>
+                  <label class="checkbox-sm"><input type="checkbox" value="Hybrid"> Hybrid</label>
+                  <label class="checkbox-sm"><input type="checkbox" value="Onsite"> Onsite</label>
+                </div>
+              </div>
+
+              <div class="form-field">
+                <label for="experience" class="field-label">Min Experience Level</label>
+                <select id="experience" class="select-input">
+                  <option value="Fresher">Fresher</option>
+                  <option value="0-1">0-1 Year</option>
+                  <option value="1-3">1-3 Years</option>
+                  <option value="3-5">3-5 Years</option>
+                </select>
+              </div>
+
+              <div class="form-field form-field--full">
+                <label for="userSkills" class="field-label">Your Skills (comma separated)</label>
+                <input id="userSkills" type="text" class="text-input" placeholder="e.g. React, Node.js, SQL" />
+              </div>
+
+              <div class="form-field form-field--full">
+                <label for="minMatchScore" class="field-label">Min Match Score Threshold: <span
+                    id="scoreValue">40</span>%</label>
+                <input type="range" id="minMatchScore" class="range-input" min="0" max="100" value="40">
+              </div>
+            </div>
+            <div class="card__footer">
+              <button class="btn btn--primary" id="savePrefsBtn">Save Preferences</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </template>
+
+    <template id="template-proof">
+      <section class="context-header">
+        <h1 class="context-header__title">Project 1 — Job Notification Tracker</h1>
+        <p class="context-header__subtitle">Final system verification and artifact collection.</p>
+      </section>
+
+      <div class="layout">
+        <div class="layout__primary">
+          <!-- Section A: Step Completion Summary -->
+          <div class="card" style="margin-bottom: 24px;">
+            <h2 class="card__title">A) Step Completion Summary</h2>
+            <div id="stepsSummary" class="steps-grid">
+              <!-- JS will inject 8 steps here -->
+            </div>
+          </div>
+
+          <!-- Section B: Artifact Collection -->
+          <div class="card">
+            <h2 class="card__title">B) Artifact Collection Inputs</h2>
+            <div class="form-grid">
+              <div class="form-field form-field--full">
+                <label for="lovableLink" class="field-label">Lovable Project Link <span
+                    class="required">*</span></label>
+                <input id="lovableLink" type="url" class="text-input artifact-input"
+                  placeholder="https://lovable.dev/projects/..." />
+              </div>
+              <div class="form-field form-field--full">
+                <label for="githubLink" class="field-label">GitHub Repository Link <span
+                    class="required">*</span></label>
+                <input id="githubLink" type="url" class="text-input artifact-input"
+                  placeholder="https://github.com/username/repo" />
+              </div>
+              <div class="form-field form-field--full">
+                <label for="deployedUrl" class="field-label">Deployed URL (Vercel) <span
+                    class="required">*</span></label>
+                <input id="deployedUrl" type="url" class="text-input artifact-input"
+                  placeholder="https://project.vercel.app" />
+              </div>
+            </div>
+
+            <div class="card__footer" style="display: flex; gap: 12px; margin-top: 24px;">
+              <button class="btn btn--primary" id="copySubmissionBtn" onclick="window.handleCopySubmission()">Copy Final
+                Submission</button>
+              <button class="btn btn--secondary" id="shipProjectBtn" onclick="window.handleShipProject()">Ship
+                Project</button>
+            </div>
+            <div id="shipSuccessMsg" class="ship-success-msg hidden">
+              Project 1 Shipped Successfully.
+            </div>
+          </div>
+        </div>
+
+        <div class="layout__secondary">
+          <div class="card">
+            <h2 class="card__title">Test Checklist</h2>
+            <div class="checklist-summary" style="padding: 0; border: 0; margin-bottom: 16px;">
+              <div class="checklist-count" id="testCount" style="font-size: 14px;">Tests Passed: 0 / 10</div>
+            </div>
+            <div class="checklist-grid checklist-grid--narrow" id="testChecklist">
+              <!-- JS will inject items here -->
+            </div>
+            <div class="card__footer" style="padding: 16px 0 0 0;">
+              <button class="btn btn--secondary btn--sm" id="resetTestsBtn" style="width: 100%;">Reset Test
+                Status</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </template>
+
+    <template id="template-ship">
+      <section class="context_header">
+        <h1 class="context-header__title">Ship & Distribute</h1>
+        <p class="context-header__subtitle">System verified and ready for production.</p>
+      </section>
+      <div class="card ship-container">
+        <div class="ship-status">✓ All Systems Green</div>
+        <p class="text-block">The Job Notification Tracker has passed all internal quality gates and is ready for
+          real-world application.</p>
+        <button class="btn btn--primary" style="margin-top: 24px;">Download Final Artifacts</button>
+      </div>
+    </template>
+
+  </div>
+
+  <script src="data.js"></script>
+  <script src="script.js"></script>
+</body>
+
+</html>
